@@ -6,15 +6,17 @@ import { Server } from 'socket.io';
 
 const app = express();
 const server = createServer(app);
-// const io = new Server(server);
+
+server.listen(3001, () => {
+  console.log('server running at http://localhost:3001');
+});
 
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000"
+    origin: "*", // FIXME: 주소값넣기
+    methods: ["GET", "POST"], 
   }
 });
-
-io.listen(4000);
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -23,17 +25,14 @@ app.get('/', (req, res) => {
 });
 
 io.on('connection', (socket) => {
-  console.log('a user connected');
+  console.log(`a user connected: ${socket.id}`);
   
-  socket.on('chat message', (msg) => {
-    console.log('message: ' + msg);
+  socket.on('sendMessage', (text) => {
+    console.log(text)
+    console.log(`${socket.id}: ${text}`)
   });
 
   socket.on('disconnect', () => {
     console.log('user disconnected');
   });
-});
-
-server.listen(3001, () => {
-  console.log('server running at http://localhost:3001');
 });
