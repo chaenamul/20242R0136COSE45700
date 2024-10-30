@@ -1,3 +1,8 @@
+## 20242R0136COSE45700\
+## install
+
+### `pnpm install`
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
