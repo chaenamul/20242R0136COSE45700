@@ -32,39 +32,51 @@ function Chatbox() {
 			socket.off(Event.RECEIVEMESSAGE, onReceiveMessage);
 		}
 	}, [chats])
-	
-	// change username
+
+	// update user list
 	useEffect(() => {
-		function onChangeUsername(string) {
-      setUsername(string);
-			setNewUsername(string);
+		function onReceiveMessage(text) {
+      setChats(chats.concat(text));
+    	bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
 		}
-		socket.on(Event.CHANGEUSERNAME, onChangeUsername);
+		socket.on(Event.RECEIVEMESSAGE, onReceiveMessage);
 		return () => {
-			socket.off(Event.CHANGEUSERNAME, onChangeUsername);
+			socket.off(Event.RECEIVEMESSAGE, onReceiveMessage);
 		}
-	}, [username])
+	}, [chats])
+	
+	// // change username
+	// useEffect(() => {
+	// 	function onChangeUsername(string) {
+  //     setUsername(string);
+	// 		setNewUsername(string);
+	// 	}
+	// 	socket.on(Event.CHANGEUSERNAME, onChangeUsername);
+	// 	return () => {
+	// 		socket.off(Event.CHANGEUSERNAME, onChangeUsername);
+	// 	}
+	// }, [username])
 
   return (
 		<Box>
-			<Stack sx={{ flexDirection: 'row', gap: '10px'}}>
+			{/* <Stack sx={{ flexDirection: 'row', gap: '10px'}}>
 				<TextField
 					value={newUsername}
 					onChange={(e) => setNewUsername(e.target.value)}
 					placeholder="enter new username"
 				/>
 				<Button onClick={() => {socket.emit(Event.CHANGEUSERNAME, newUsername)}}> Change Username</Button>
-			</Stack>
+			</Stack> */}
       <TextField
         value={text}
         onChange={(e) => setText(e.target.value)}
         onKeyDown={handleKeyDown}
         placeholder="Type a message"
       />
-			<Stack>
+			<Stack sx={{ height: 400, width: 400, backgroundColor: "lightgrey", overflow: "scroll" }}>
 				{
 					chats.map((chat, index) =>
-							<Box key={ index }>{ chat }</Box>
+							<Box key={ index } sx={{ backgroundColor: index % 2 === 0 ? "white" : "lightgrey"}}>{ chat }</Box>
 					)
 				}
 				<Box ref={bottomRef} />
