@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Event, socket } from "socket/socket";
 import { Box, Stack, Button, Typography } from "@mui/material";
@@ -17,13 +17,13 @@ function Header({ isConnected }) {
   }
 
   return (
-    <Stack sx={{ backgroundColor: 'lightgrey', p: '20px', flexDirection: 'row', justifyContent: 'space-between'}}>
+    <Stack sx={{ width: '100%', backgroundColor: 'lightgrey', p: '20px', flexDirection: 'row', justifyContent: 'space-between'}}>
       <Stack sx={{ flexDirection: 'row', gap: '10px' }}>
         <Box onClick={() => navigate(PATHS.main)}>
-          <Typography variant="h4">Main</Typography>
+          <Typography variant="h6">Main</Typography>
         </Box>
         <Box onClick={() => navigate(PATHS.playground)}>
-          <Typography variant="h4">Playground</Typography>
+          <Typography variant="h6">Playground</Typography>
         </Box>
       </Stack>
       <Stack sx={{ flexDirection: 'row', gap: '10px' }}>

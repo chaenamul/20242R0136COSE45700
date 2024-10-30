@@ -27,12 +27,17 @@ app.get('/', (req, res) => {
 io.on('connection', (socket) => {
   console.log(`connected:    ${socket.id}`);
   
-  socket.on('sendMessage', (text) => {
-    console.log(text)
-    console.log(`${socket.id}: ${text}`)
-    socket.broadcast.emit('receiveMessage', `${socket.id}: ${text}`)
-    socket.emit('receiveMessage', `Me: ${text}`)
+  socket.on('sendMessage', (data) => {
+    console.log(data)
+    console.log(`${data.username}(${socket.id}): ${data.text}`)
+    socket.broadcast.emit('receiveMessage', `${data.username}: ${data.text}`)
+    socket.emit('receiveMessage', `Me: ${data.text}`)
   });
+
+  socket.on('changeUsername', (string) => {
+    socket.emit('changeUsername', string)
+    socket.emit('receiveMessage', `Changed Nickname to ${string}`)
+  })
 
   socket.on('disconnect', () => {
     console.log(`disconnected: ${socket.id}`);
