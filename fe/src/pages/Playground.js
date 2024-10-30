@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Event, socket } from "socket/socket";
-import { Box, TextField } from "@mui/material";
+import { Box, Button, TextField } from "@mui/material";
+import Chatbox from "components/Chatbox";
 
 
 function Playground() {
@@ -19,13 +20,13 @@ function Playground() {
 
   return (
     <Box>
-      Hello
       <TextField
         value={text}
         onChange={(e) => setText(e.target.value)}
         onKeyDown={handleKeyDown}
         placeholder="Type a message"
       />
+      <Chatbox />
     </Box>
   );
 }

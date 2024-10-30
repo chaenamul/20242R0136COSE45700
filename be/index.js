@@ -25,14 +25,16 @@ app.get('/', (req, res) => {
 });
 
 io.on('connection', (socket) => {
-  console.log(`a user connected: ${socket.id}`);
+  console.log(`connected:    ${socket.id}`);
   
   socket.on('sendMessage', (text) => {
     console.log(text)
     console.log(`${socket.id}: ${text}`)
+    socket.broadcast.emit('receiveMessage', `${socket.id}: ${text}`)
+    socket.emit('receiveMessage', `Me: ${text}`)
   });
 
   socket.on('disconnect', () => {
-    console.log('user disconnected');
+    console.log(`disconnected: ${socket.id}`);
   });
 });

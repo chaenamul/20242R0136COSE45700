@@ -3,7 +3,7 @@ import React, { Suspense, lazy, cloneElement } from "react";
 import { useRoutes, Navigate } from "react-router-dom";
 
 // const LoginPage = lazy(() => import("pages/LoginPage"));
-// const MainPage = lazy(() => import("pages/MainPage"));
+const MainPage = lazy(() => import("pages/MainPage"));
 const Playground = lazy(() => import("pages/Playground"));
 const Page404 = lazy(() => import("pages/Page404"));
 
@@ -12,10 +12,9 @@ function Router() {
     {
       path: "/",
       children: [
-        // FIXME: 임시로 playground를 최초경로 설정
-        { element: <Navigate to="/playground" replace />, index: true },
+        { element: <Navigate to="/main" replace />, index: true },
         // { path: "login", element: <LoginPage /> },
-        // { path: "main", element: <MainPage /> },
+        { path: "main", element: <MainPage /> },
         { path: "playground", element: <Playground />},
         // {
         //   path: "project",
