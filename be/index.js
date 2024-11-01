@@ -17,11 +17,14 @@ const io = new Server(server, {
 });
 
 let userList = []
+let users = {}
 
 io.on('connection', (socket) => {
   console.log(`connected:    ${socket.id}`);
   userList.push({ id: socket.id, username: socket.id})
+  users[id] = username
   io.emit('updateUserList', userList)
+  console.log(`userList: `, userList)
   
   socket.on('sendMessage', (data) => {
     console.log(data)
@@ -30,13 +33,21 @@ io.on('connection', (socket) => {
     socket.emit('receiveMessage', `Me: ${data.text}`)
   });
 
+  socket.on('getUsername', () => {
+    socket.emit('getUsername', )
+  })
+
   socket.on('changeUsername', (string) => {
-    // socket.emit('changeUsername', string)
+    socket.emit('changeUsername', string)
     userList = userList.map(user => {
       if (user.id === socket.id) {
-        return { ...user, username: string };
+        console.log('user to change: ', user)
+        return { id: user.id, username: string };
+      } else {
+        return user;
       }
     });
+    console.log(`userList: `, userList)
     io.emit('updateUserList', userList)
     socket.emit('receiveMessage', `Changed Nickname to ${string}`)
   })

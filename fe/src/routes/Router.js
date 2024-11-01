@@ -12,7 +12,8 @@ function Router() {
     {
       path: "/",
       children: [
-        { element: <Navigate to="/main" replace />, index: true },
+        // FIXME: 임시로 playground 최초 라우팅
+        { element: <Navigate to="/playground" replace />, index: true },
         // { path: "login", element: <LoginPage /> },
         { path: "main", element: <MainPage /> },
         { path: "playground", element: <Playground />},

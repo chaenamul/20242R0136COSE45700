@@ -24,6 +24,7 @@
     "start:dev1": "dotenv -e .env.dev1 react-scripts start",
     "start:dev2": "dotenv -e .env.dev2 react-scripts start",
     "build": "react-scripts build",
+    "build:dev2": "dotenv -e .env.dev2 react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

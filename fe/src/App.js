@@ -1,47 +1,76 @@
 import React, { useState, useEffect } from 'react';
 import "App.css";
+import { io } from 'socket.io-client';
 import { CssBaseline } from '@mui/material';
+import { SocketProvider } from 'contexts/SocketContext';
 import { BrowserRouter } from "react-router-dom";
-import Header from "components/Header";
 import Router from "routes/Router";
-import { socket } from 'socket/socket';
-import { ConnectionManager } from 'socket/ConnectionManager';
+import Header from "components/Header";
+
+// import { socket } from 'socket/socket';
 
 function App() {
-  const [isConnected, setIsConnected] = useState(socket.connected);
+  const [namespace, setNamespace] = useState("/");
+  const URL = process.env.REACT_APP_SOCKET_URL;
 
   useEffect(() => {
-    if (socket.connected) {
-      setIsConnected(true);
-    }
+    const socket = io(URL);
 
-    function onConnect() {
-      setIsConnected(true);
-    }
+    socket.on("joinedRoom", (roomName) => {
+      setNamespace(`/${roomName}`);
+      socket.disconnect();
+    });
 
-    function onDisconnect() {
-      setIsConnected(false);
-    }
-
-    socket.on('connect', onConnect);
-    socket.on('disconnect', onDisconnect);
-
-    return () => {
-      socket.off('connect', onConnect);
-      socket.off('disconnect', onDisconnect);
-    };
+    return () => socket.disconnect();
   }, []);
 
   return (
     <div>
       <CssBaseline />
-      <BrowserRouter>
-        <Header isConnected={ isConnected } />
-        {/* <ConnectionManager isConnected={ isConnected } /> */}
-        <Router />
-      </BrowserRouter>
+      <SocketProvider namespace={namespace}>
+        <BrowserRouter>
+          {/* <Header isConnected={ isConnected } /> */}
+          <Router />
+        </BrowserRouter>
+      </SocketProvider>
     </div>
   );
 }
+
+// function App() {
+//   const [isConnected, setIsConnected] = useState(socket.connected);
+
+//   useEffect(() => {
+//     if (socket.connected) {
+//       setIsConnected(true);
+//     }
+
+//     function onConnect() {
+//       setIsConnected(true);
+//     }
+
+//     function onDisconnect() {
+//       setIsConnected(false);
+//     }
+
+//     socket.on('connect', onConnect);
+//     socket.on('disconnect', onDisconnect);
+
+//     return () => {
+//       socket.off('connect', onConnect);
+//       socket.off('disconnect', onDisconnect);
+//     };
+//   }, []);
+
+//   return (
+//     <div>
+//       <CssBaseline />
+//       <BrowserRouter>
+//         <Header isConnected={ isConnected } />
+//         <Router />
+//       </BrowserRouter>
+//     </div>
+//   );
+// }
 
 export default App;

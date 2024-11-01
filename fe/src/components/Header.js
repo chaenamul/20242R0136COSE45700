@@ -7,7 +7,7 @@ import { PATHS } from "routes/paths";
 function Header({ isConnected }) {
   const navigate = useNavigate();
 	const [newUsername, setNewUsername] = useState(socket.id);
-	// const [username, setUsername] = useState(socket.id);
+	const [username, setUsername] = useState(socket.id);
 
   // socket
   function connect() {
@@ -19,16 +19,16 @@ function Header({ isConnected }) {
   }
   
 	// change username
-	// useEffect(() => {
-	// 	function onChangeUsername(string) {
-  //     setUsername(string);
-	// 		setNewUsername(string);
-	// 	}
-	// 	socket.on(Event.CHANGEUSERNAME, onChangeUsername);
-	// 	return () => {
-	// 		socket.off(Event.CHANGEUSERNAME, onChangeUsername);
-	// 	}
-	// }, [username])
+	useEffect(() => {
+		function onChangeUsername(string) {
+      setUsername(string);
+			setNewUsername(string);
+		}
+		socket.on(Event.CHANGEUSERNAME, onChangeUsername);
+		return () => {
+			socket.off(Event.CHANGEUSERNAME, onChangeUsername);
+		}
+	}, [username])
 
   return (
     <Stack sx={{ width: '100%', backgroundColor: 'lightgrey', p: '20px', flexDirection: 'row', justifyContent: 'space-between'}}>
