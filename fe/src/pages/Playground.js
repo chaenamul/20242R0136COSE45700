@@ -6,7 +6,7 @@ import Chatbox from "components/Chatbox";
 
 
 function Playground() {
-  const socket = useSocket();
+  // const socket = useSocket();
   const [username, setUsername] = useState(null)
 
   // useEffect(() => {
@@ -14,10 +14,10 @@ function Playground() {
   // }, [])
   return (
     <Box>
-      {/* <Chatbox /> */}
-      <Button variant="outlined" onClick={() => {
+      {/* <Button variant="outlined" onClick={() => {
         socket.emit('joinRoom', )
-      }}>Join Random Room</Button>
+      }}>Join Random Room</Button> */}
+      <Chatbox />
     </Box>
   );
 }

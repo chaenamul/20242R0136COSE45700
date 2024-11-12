@@ -10,26 +10,14 @@ import Header from "components/Header";
 // import { socket } from 'socket/socket';
 
 function App() {
-  const [namespace, setNamespace] = useState("/");
-  const URL = process.env.REACT_APP_SOCKET_URL;
-
-  useEffect(() => {
-    const socket = io(URL);
-
-    socket.on("joinedRoom", (roomName) => {
-      setNamespace(`/${roomName}`);
-      socket.disconnect();
-    });
-
-    return () => socket.disconnect();
-  }, []);
-
+  
   return (
     <div>
       <CssBaseline />
-      <SocketProvider namespace={namespace}>
+      {/* <SocketProvider namespace={namespace}> */}
+      <SocketProvider>
         <BrowserRouter>
-          {/* <Header isConnected={ isConnected } /> */}
+          <Header />
           <Router />
         </BrowserRouter>
       </SocketProvider>
