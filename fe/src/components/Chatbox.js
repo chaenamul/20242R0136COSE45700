@@ -7,11 +7,12 @@ const ChatBox = () => {
 	const socket = useSocket();
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
-  const [username, setUsername] = useState("");  // Username state
   const bottomRef = useRef(null);
 
   // Listen for incoming messages
   useEffect(() => {
+    if (!socket) return;
+		
     // Event listener for receiving messages
     socket.on(Event.RECEIVE_MESSAGE, (newMessage) => {
       setMessages((prevMessages) => [...prevMessages, newMessage]);
@@ -23,19 +24,6 @@ const ChatBox = () => {
     // Clean up listeners on unmount
     return () => {
       socket.off(Event.RECEIVE_MESSAGE);
-    };
-  }, [socket]);
-  
-  // Listen for username update
-  useEffect(() => {
-    // Listen for initial username from server
-    socket.on(Event.SET_USERNAME, (data) => {
-      setUsername(data.username);  // Set the initial username
-    });
-
-    // Clean up listeners on unmount
-    return () => {
-      socket.off(Event.SET_USERNAME);
     };
   }, [socket]);
 
@@ -54,16 +42,6 @@ const ChatBox = () => {
         handleSendMessage();
       }
     }
-  };
-
-  // Handle nickname change
-  const handleUsernameChange = (e) => {
-    setUsername(e.target.value);  // Update username in state
-  };
-
-  // Emit the change_username event to the server
-  const handleUsernameBlur = () => {
-    socket.emit(Event.CHANGE_USERNAME, username);  // Emit username change to server
   };
 
   // Send the message to the server
@@ -100,41 +78,20 @@ const ChatBox = () => {
         <div ref={bottomRef} />
       </Paper>
 
-      <Box mb={2}>
-        <TextField
-          label="Username"
-          variant="outlined"
-          value={username}
-          onChange={handleUsernameChange}
-          onBlur={handleUsernameBlur}
-          margin="normal"
-        />
-      </Box>
-
       <TextField
         placeholder="Type your message..."
         variant="outlined"
         value={message}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
-        disabled={socket.disconnected}
-        fullWidth
         multiline
-        rows={2}
-        sx={{
-          width: "50%",
-          marginBottom: 2
-        }}
+				fullWidth
+				slotProps={{
+					input: {
+						endAdornment: <Button onClick={handleSendMessage} disabled={!message.trim()}>Send</Button>
+					}
+				}}
       />
-
-      <Button 
-        variant="contained" 
-        color="primary" 
-        onClick={handleSendMessage} 
-        disabled={!message.trim()}
-      >
-        Send
-      </Button>
     </Box>
   );
 };

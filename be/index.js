@@ -61,7 +61,7 @@ io.on('connection', (socket) => {
   // Handle username change
   socket.on('change_username', (newUsername) => {
     userList[socket.id] = newUsername;
-    socket.emit('username_changed', { username: newUsername });
+    socket.emit('set_username', { username: newUsername });
   });
 
   // Handle incoming messages
@@ -92,6 +92,10 @@ io.on('connection', (socket) => {
       delete gameList[game]; // 빈 방 삭제
     }
   });
+
+  socket.on('debug', (data) => {
+    io.of(data.game).emit('receive_message', { text: data.game, sender: 'Server' });
+  })
 
   // Handle disconnection
   socket.on('disconnect', () => {

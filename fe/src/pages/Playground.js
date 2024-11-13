@@ -6,18 +6,15 @@ import Chatbox from "components/Chatbox";
 
 
 function Playground() {
-  // const socket = useSocket();
-  const [username, setUsername] = useState(null)
 
   // useEffect(() => {
     
   // }, [])
   return (
     <Box>
-      {/* <Button variant="outlined" onClick={() => {
-        socket.emit('joinRoom', )
-      }}>Join Random Room</Button> */}
-      <Chatbox />
+      <Box sx={{ width: "50%", pl: 2}}>
+        <Chatbox />
+      </Box>
     </Box>
   );
 }
