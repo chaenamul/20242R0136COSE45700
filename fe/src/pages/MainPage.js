@@ -1,13 +1,14 @@
-import React, { useState } from "react";
-import { Event } from "socket/socket";
-import { Box, Button, TextField } from "@mui/material";
-import Chatbox from "components/Chatbox";
+import React from "react";
+import { Box } from "@mui/material";
+import GameBox from "components/GameBox";
 
 
 function MainPage() {
   return (
     <Box>
-      <Chatbox />
+      {/* <Box sx={{ width: "50%", pl: 2}}> */}
+        <GameBox />
+      {/* </Box> */}
     </Box>
   );
 }

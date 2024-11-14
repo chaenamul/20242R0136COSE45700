@@ -20,6 +20,35 @@ const io = new Server(server, {
 
 // Object to store user information, mapping socket ID to username
 const userList = {};
+
+// TODO: add database
+const userDataList = {
+  alice: {
+    health: 100
+    // health: {
+    //   head: 100,
+    //   thorax: 100,
+    //   stomach: 100,
+    //   leftArm: 100,
+    //   rightArm: 100,
+    //   leftLeg: 100,
+    //   rightLeg: 100
+    // },
+    // inventory: {
+    //   equipments: {
+    //     first: {},
+    //     second: {},
+    //     armor: {}
+    //   },
+    //   rig: [],
+    //   backpack: []
+    // }
+  },
+  daisy: {
+    health: 100
+  }
+}
+const maxPlayer = 2
 const gameList = {}; // 게임 방 목록
 
 // Function to generate a random username
@@ -36,18 +65,6 @@ function assignRoom() {
   return 'room1';
 }
 
-// 빈 방 찾기 및 생성 함수
-function findOrCreateGame() {
-  for (const game in gameList) {
-    if (gameList[game].length < 1) {
-      return game;
-    }
-  }
-  const newGame = `/game${Object.keys(gameList).length + 1}`;
-  gameList[newGame] = [];
-  return newGame;
-}
-
 // Handle new Socket.IO connections
 io.on('connection', (socket) => {
 
@@ -56,7 +73,8 @@ io.on('connection', (socket) => {
   userList[socket.id] = username;
   socket.join(room);
   socket.emit('set_username', { username: username });
-  console.log(`${username} | ${socket.id} connected (${socket.nsp.name})`);
+  // console.log(`${username} | ${socket.id} connected (${socket.nsp.name})`);
+  console.log('userList: ', userList)
 
   // Handle username change
   socket.on('change_username', (newUsername) => {
@@ -76,6 +94,56 @@ io.on('connection', (socket) => {
       socket.emit('receive_message', { text: message, sender: 'You' });
     }
   });
+  
+  socket.on('join_lobby', () => {
+    socket.emit('change_namespace', '/lobby');
+    console.log('user joined lobby');
+  });
+
+  socket.on('debug', (data) => {
+    io.of(data.game).emit('receive_message', { text: data.game, sender: 'Server' });
+    console.log('userDataList: ', userDataList)
+    console.log('gameList: ', gameList)
+  })
+
+  // Handle disconnection
+  socket.on('disconnect', () => {
+    const username = userList[socket.id];
+    delete userList[socket.id];
+    console.log(`${username} disconnected`);
+    console.log('userList: ', userList)
+  });
+});
+
+
+// 빈 방 찾기 및 생성 함수
+function findOrCreateGame() {
+  for (const game in gameList) {
+    if (gameList[game].players.length < maxPlayer) {
+      return game;
+    }
+  }
+  const newGame = `/game${Object.keys(gameList).length + 1}`;
+  gameList[newGame] = {
+    gameStatus: "new",
+    players: [],
+  };
+  return newGame;
+}
+
+const lobby = io.of('/lobby');
+
+lobby.on('connection', (socket) => {
+
+  socket.on('register_username', (data) => {
+    if (!(data.username in userDataList)) {
+      userDataList[data.username] = { health: 100 } // initialize user object
+    }
+    socket.emit('check_online', {
+      isOnline: true,
+      userData: userDataList[data.username]
+    });
+  })
 
   // Handle namespace assignment
   socket.on('join_game', () => {
@@ -93,20 +161,13 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on('debug', (data) => {
-    io.of(data.game).emit('receive_message', { text: data.game, sender: 'Server' });
-  })
-
-  // Handle disconnection
   socket.on('disconnect', () => {
-    const username = userList[socket.id];
-    delete userList[socket.id];
-    console.log(`${username} disconnected`);
+    // console.log(`${username} disconnected`);
   });
-});
+})
 
 const parentNamespace = io.of(/^\/game\d+$/);
 
-parentNamespace.on("connection", (socket) => {
+parentNamespace.on('connection', (socket) => {
   console.log(`${socket.id} connected (${socket.nsp.name})`);
 });
