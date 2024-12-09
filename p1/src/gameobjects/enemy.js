@@ -1,68 +1,83 @@
-export class Enemy extends Phaser.GameObjects.Sprite {
-  constructor(scene, x, y, texture, hp = 100, speed = 50, power = 10) {
+import Phaser from 'phaser'
+
+export class Enemy extends Phaser.GameObjects.Sprite {    
+  constructor(scene, x, y, texture) {
     super(scene, x, y, texture)
 
-    scene.add.existing(this)
+    // Add the sprite to the scene
+    this.scene.add.existing(this)
 
-    // Enemy properties
+    this.name = "bee";
     this.scene = scene
-    this.hp = hp
-    this.speed = speed
-    this.power = power
+    this.hp = hp = 30
+    this.attackDamage = 10
+    this.attackSpeedModifier = 1
+
+    this.attackDelay = 1200
+    this.attackTimer = 0
     this.isAlive = true
   }
 
-  takeDamage(amount) {
-    if (!this.isAlive) return
-
-    this.hp -= amount
-
-    if (this.hp <= 0) {
-      this.hp = 0
-      this.die()
-    }
-  }
-
-  die() {
-    this.isAlive = false
-
-    // Notify the scene that this enemy died
-    this.scene.handleEnemyDeath(this)
-
-    // Fade out effect
+  initialize() {
+    this.play('bee_idle');
+    // this.setAttackDelay();
     this.scene.tweens.add({
       targets: this,
-      alpha: 0, // Fade out to transparency
-      duration: 500, // 0.5 seconds
-      ease: 'Linear',
+      x: 720, // Target X position
+      y: 180, // Target Y position
+      duration: 1000, // Duration in milliseconds
+      ease: 'Linear', // Movement easing
       onComplete: () => {
-        this.destroy() // Remove the enemy sprite
+        this.scene.startBattle();
       }
     })
   }
 
-  attack(target) {
-    if (!this.isAlive) return
+//   setAttackDelay() {
+//     if (this.attackSpeedModifier == 0) return 100;
+//     this.attackDelay = 1000 / this.attackSpeedModifier;
+//   }
 
-    // Deal damage to the target
-    target.takeDamage(this.power)
+  // attack(target) {
+  //   if (!this.isAlive) return
 
-    // Optionally, trigger an attack animation or effect
-    this.scene.tweens.add({
-      targets: this,
-      scaleX: 1.2,
-      scaleY: 1.2,
-      duration: 100,
-      yoyo: true,
-      ease: 'Power1'
-    })
+  //   this.play('bee_attack')
+  //   target.takeDamage(this.attackDamage)
 
-    console.log(`Enemy attacks! Target HP: ${target.hp}`)
-  }
+  //   console.log(`${target.name} HP: ${target.hp}`)
+  // }
+  
+  // takeDamage(amount) {
+  //   if (!this.isAlive) return
+  //   this.hp -= amount
 
-  update() {
-    if (this.isAlive) {
-      // Add behavior for the enemy if needed
-    }
-  }
+  //   if (this.hp <= 0) {
+  //     this.hp = 0
+  //     this.die()
+  //   }
+  // }
+
+  // die() {
+  //   this.isAlive = false
+
+  //   // Fade out effect
+  //   this.scene.tweens.add({
+  //     targets: this,
+  //     alpha: 0, // Fade out to transparency
+  //     duration: 500, // 0.5 seconds
+  //     ease: 'Linear',
+  //     onStart: () => {
+  //       this.play('bee_death')
+  //     },
+  //     onComplete: () => {
+  //       this.destroy() // Remove the enemy sprite
+  //     }
+  //   })
+
+  //   // Notify the scene that this enemy died
+  //   this.scene.handleEnemyDeath(this)
+  // }
+
+  // update(time, delta) {
+  // }
 }

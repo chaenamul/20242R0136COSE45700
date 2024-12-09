@@ -5,66 +5,66 @@ export class Player extends Phaser.GameObjects.Sprite {
     super(scene, x, y, texture)
 
     // Add the sprite to the scene
-    scene.add.existing(this)
+    this.scene.add.existing(this)
 
+    this.name = "player"
     this.scene = scene
-    this.hp = hp
-    this.attackDelay = 1000
+    this.hp = hp = 100
     this.attackDamage = 10
+    this.attackSpeedModifier = 1
+
+    this.attackDelay = 1000
+    this.attackTimer = 0
     this.isAlive = true
   }
 
-  takeDamage(amount) {
-    if (!this.isAlive) return
-
-    this.hp -= amount
-
-    if (this.hp <= 0) {
-      this.hp = 0
-      this.die()
-    }
+  initialize() {
+    this.play('hero_idle');
+    this.setAttackDelay();
   }
 
-  die() {
-    this.isAlive = false
+  // setAttackDelay() {
+  //   if (this.attackSpeedModifier == 0) return 100;
+  //   this.attackDelay = 1000 / this.attackSpeedModifier;
+  // }
 
-    // Notify the scene that this enemy died
-    this.scene.handleEnemyDeath(this)
+  // attack(target) {
+  //   if (!this.isAlive) return
 
-    // Fade out effect
-    this.scene.tweens.add({
-      targets: this,
-      alpha: 0, // Fade out to transparency
-      duration: 500, // 0.5 seconds
-      ease: 'Linear',
-      onComplete: () => {
-        this.destroy() // Remove the enemy sprite
-      }
-    })
-  }
+  //   this.play('hero_attack')
+  //   target.takeDamage(this.attackDamage)
 
-  attack(target) {
-    if (!this.isAlive) return
+  //   console.log(`${target.name} HP: ${target.hp}`)
+  // }
+  
+  // takeDamage(amount) {
+  //   if (!this.isAlive) return
+  //   this.hp -= amount
 
-    // Deal damage to the target
-    target.takeDamage(this.power)
+  //   if (this.hp <= 0) {
+  //     this.hp = 0
+  //     this.die()
+  //   }
+  // }
 
-    // Optionally, trigger an attack animation or effect
-    this.scene.tweens.add({
-      targets: this,
-      scaleX: 1.2,
-      scaleY: 1.2,
-      duration: 100,
-      yoyo: true,
-      ease: 'Power1'
-    })
+  // die() {
+  //   this.isAlive = false
 
-    console.log(`Enemy attacks! Target HP: ${target.hp}`)
-  }
+  //   // Fade out effect
+  //   this.scene.tweens.add({
+  //     targets: this,
+  //     alpha: 0, // Fade out to transparency
+  //     duration: 500, // 0.5 seconds
+  //     ease: 'Linear',
+  //     onComplete: () => {
+  //       this.destroy() // Remove the enemy sprite
+  //     }
+  //   })
 
-  update() {
-    if (this.isAlive) {
-      // Add behavior for the enemy if needed
-    }
-  }
+  //   this.scene.handlePlayerDeath();
+  // }
+
+  // update() {
+  
+  // }
 }
