@@ -75,43 +75,43 @@ export class Preloader extends Scene
         this.anims.create({
             key: 'hero_idle',
             frames: this.anims.generateFrameNumbers('hero_idle', { start: 0, end: 9 }),
-            frameRate: 10,
+            frameRate: 12,
             repeat: -1
         });
         this.anims.create({
             key: 'hero_attack',
-            frames: this.anims.generateFrameNumbers('hero_attack', { start: 0, end: 4 }),
-            frameRate: 10,
+            frames: this.anims.generateFrameNumbers('hero_attack', { start: 0, end: 3 }),
+            frameRate: 12,
             repeat: 0
         });
         this.anims.create({
             key: 'hero_attack_double',
             frames: this.anims.generateFrameNumbers('hero_attack_double', { start: 0, end: 9 }),
-            frameRate: 10,
+            frameRate: 12,
             repeat: 0
         });
         this.anims.create({
             key: 'hero_death',
             frames: this.anims.generateFrameNumbers('hero_death', { start: 0, end: 9 }),
-            frameRate: 10,
+            frameRate: 12,
             repeat: 0
         });
         this.anims.create({
             key: 'bee_idle',
-            frames: this.anims.generateFrameNumbers('bee_idle', { start: 0, end: 4 }),
-            frameRate: 10,
+            frames: this.anims.generateFrameNumbers('bee_idle', { start: 0, end: 3 }),
+            frameRate: 12,
             repeat: -1
         });
         this.anims.create({
             key: 'bee_attack',
-            frames: this.anims.generateFrameNumbers('bee_attack', { start: 0, end: 4 }),
-            frameRate: 10,
+            frames: this.anims.generateFrameNumbers('bee_attack', { start: 0, end: 3 }),
+            frameRate: 12,
             repeat: 0
         });
         this.anims.create({
             key: 'bee_hit',
-            frames: this.anims.generateFrameNumbers('bee_hit', { start: 0, end: 4 }),
-            frameRate: 10,
+            frames: this.anims.generateFrameNumbers('bee_hit', { start: 0, end: 3 }),
+            frameRate: 12,
             repeat: 0
         });
 
