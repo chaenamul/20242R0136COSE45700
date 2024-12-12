@@ -1,26 +1,30 @@
 import Phaser from 'phaser'
 
 export class Enemy extends Phaser.GameObjects.Sprite {    
-  constructor(scene, x, y, texture) {
+  constructor(scene, x, y, texture, name, stats = {
+    hp: 30,
+    dmg: 10,
+    speed: 1.2
+  }) {
     super(scene, x, y, texture)
 
     // Add the sprite to the scene
     this.scene.add.existing(this)
 
-    this.name = "bee";
+    this.name = name;
     this.scene = scene;
-    this.hp = 30;
-    this.attackDamage = 10
-    this.attackSpeedModifier = 1
+    this.hp = stats.hp;
+    this.attackDamage = stats.dmg;
+    this.attackSpeedModifier = stats.speed;
 
-    this.attackDelay = 1200
+    this.attackDelay = 1000
     this.attackTimer = 0
     this.isAlive = true
   }
 
   initialize() {
-    this.play('bee_idle');
-    // this.setAttackDelay();
+    this.play(`${this.name}_idle`);
+    this.setAttackDelay();
     this.scene.tweens.add({
       targets: this,
       x: 720, // Target X position
@@ -41,11 +45,11 @@ export class Enemy extends Phaser.GameObjects.Sprite {
   attack(target) {
     if (!this.isAlive) return
 
-    this.play('bee_attack')
-    this.once('animationcomplete-bee_attack', () => this.play('bee_idle'));
+    this.play(`${this.name}_attack`)
+    this.once(`animationcomplete-${this.name}_attack`, () => this.play(`${this.name}_idle`));
     target.takeDamage(this.attackDamage)
 
-    console.log(`${target.name} HP: ${target.hp}`)
+    // console.log(`${target.name} HP: ${target.hp}`)
   }
   
   takeDamage(amount) {
@@ -65,13 +69,13 @@ export class Enemy extends Phaser.GameObjects.Sprite {
     this.scene.tweens.add({
       targets: this,
       alpha: 0, // Fade out to transparency
-      duration: 500, // 0.5 seconds
+      duration: 400,
       ease: 'Linear',
       onStart: () => {
-        // this.play('bee_death')
+        this.play(`${this.name}_death`)
       },
       onComplete: () => {
-        this.destroy() // Remove the enemy sprite
+        this.destroy();
       }
     })
 

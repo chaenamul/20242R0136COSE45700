@@ -41,6 +41,10 @@ export class Preloader extends Scene
             frameWidth: 480, // Adjust this to the width of each frame
             frameHeight: 320 // Adjust this to the height of each frame
         })
+        this.load.spritesheet('hero_run', 'hero_run.png', {
+            frameWidth: 480, // Adjust this to the width of each frame
+            frameHeight: 320 // Adjust this to the height of each frame
+        })
         this.load.spritesheet('hero_attack', 'hero_attack.png', {
             frameWidth: 480, // Adjust this to the width of each frame
             frameHeight: 320 // Adjust this to the height of each frame
@@ -65,6 +69,10 @@ export class Preloader extends Scene
             frameWidth: 192, // Adjust this to the width of each frame
             frameHeight: 192 // Adjust this to the height of each frame
         })
+        this.load.spritesheet('bee_death', 'bee_death.png', {
+            frameWidth: 192, // Adjust this to the width of each frame
+            frameHeight: 192 // Adjust this to the height of each frame
+        })
     }
 
     create ()
@@ -75,6 +83,12 @@ export class Preloader extends Scene
         this.anims.create({
             key: 'hero_idle',
             frames: this.anims.generateFrameNumbers('hero_idle', { start: 0, end: 9 }),
+            frameRate: 12,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'hero_run',
+            frames: this.anims.generateFrameNumbers('hero_run', { start: 0, end: 9 }),
             frameRate: 12,
             repeat: -1
         });
@@ -114,9 +128,13 @@ export class Preloader extends Scene
             frameRate: 12,
             repeat: 0
         });
+        this.anims.create({
+            key: 'bee_death',
+            frames: this.anims.generateFrameNumbers('bee_death', { start: 0, end: 3 }),
+            frameRate: 8,
+            repeat: 0
+        });
 
-        //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
-        // this.scene.start('MainMenu');
         this.scene.transition({
             target: 'Battle',
             duration: 1000,

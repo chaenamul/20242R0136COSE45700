@@ -7,25 +7,35 @@ export class Player extends Phaser.GameObjects.Sprite {
     // Add the sprite to the scene
     this.scene.add.existing(this)
 
-    this.name = "player"
-    this.scene = scene
-    this.hp = 100
-    this.attackDamage = 10
-    this.attackSpeedModifier = 1
+    this.name = "player";
+    this.scene = scene;
+    this.maxHp = 100;
+    this.hp = 100;
+    this.attackDamage = 10;
+    this.attackSpeedModifier = 1;
 
-    this.attackDelay = 1000
-    this.attackTimer = 0
-    this.isAlive = true
+    this.attackDelay = 1000;
+    this.attackTimer = 0;
+    this.isAlive = true;
+  
+    this.equipments = {
+      
+    }
   }
 
   initialize() {
     this.play('hero_idle');
     this.setAttackDelay();
+    this.move();
   }
 
   setAttackDelay() {
     if (this.attackSpeedModifier == 0) return 100;
     this.attackDelay = 1000 / this.attackSpeedModifier;
+  }
+
+  move() {
+    this.play('hero_run');
   }
 
   attack(target) {
@@ -35,7 +45,7 @@ export class Player extends Phaser.GameObjects.Sprite {
     this.once('animationcomplete-hero_attack', () => this.play('hero_idle'));
     target.takeDamage(this.attackDamage)
 
-    console.log(`${target.name} HP: ${target.hp}`)
+    // console.log(`${target.name} HP: ${target.hp}`)
   }
   
   takeDamage(amount) {
@@ -57,8 +67,11 @@ export class Player extends Phaser.GameObjects.Sprite {
       alpha: 0, // Fade out to transparency
       duration: 500, // 0.5 seconds
       ease: 'Linear',
+      onStart: () => {
+        this.play(`hero_death`)
+      },
       onComplete: () => {
-        this.destroy() // Remove the enemy sprite
+        this.destroy()
       }
     })
 
