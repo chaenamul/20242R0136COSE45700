@@ -358,6 +358,10 @@ export class Battle extends Scene
             }
         } else if (item.itemType === 'auto') {
             const cost = item.itemLevel;
+            if (this.autoEnabled[rarityIndex[item.rarity]]) {
+                new TempText(this, 1620, 560, `이미 구매했어요`, '#ff4444');
+                return;
+            };
             if (this.gold >= cost) {
                 this.earnGold(-cost);
                 new TempText(this, 1620, 560, `-${cost} G`, '#ff4444');
