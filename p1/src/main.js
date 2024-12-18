@@ -22,7 +22,13 @@ const config = {
         MainMenu,
         Battle,
         GameOver
-    ]
+    ],
+    defaultTextStyle: {
+      fontFamily: 'stardust',
+      color: '#ffffff',
+      stroke: '#000000',
+      strokeThickness: 3,
+    },
 };
 
 export default new Phaser.Game(config);
