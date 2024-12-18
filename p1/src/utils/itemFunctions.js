@@ -161,13 +161,15 @@ function createRandomOption(prefixIndex, rarity) {
 
 export function refineItem(item) {
   const newItem = item;
-  const upgradeValue = Math.round((5 + 2 * Math.random()) * rarityMultiplier[item.rarity]);
+  // const upgradeValue = goodRound(100 + Math.round(((4.5 + Math.random()) / 2) * rarityMultiplier[item.rarity]), 2);
+  const upgradeValue = goodRound(100 + Math.round(2 * rarityMultiplier[item.rarity]), 2);
   const mainColor = '#ff' + Math.max(15 - item.refined, 0).toString(16).repeat(4);
   newItem.refined++;
-  newItem.mainValue += upgradeValue;
+  console.log(upgradeValue);
+  newItem.mainValue = Math.ceil(item.mainValue * upgradeValue / 100);
   newItem.statTexts[0] = item.statTexts[0].replace(/(\+\d+)/, `+${newItem.mainValue}`);
   newItem.statRarities[0] = mainColor;
-  console.log(newItem);
+  // console.log(newItem);
   return newItem;
 }
 

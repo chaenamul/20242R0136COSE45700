@@ -59,13 +59,16 @@ export class Battle extends Scene
         this.rightItem = null;
         this.selectedItem = null;
 
+        this.itemQueueLengthText = this.add.text(120, 420, '남은 장비: 0', {
+            fontFamily: 'stardust-bold', fontSize: '28px', color: '#ffffff'
+        }).setOrigin(0.5, 0.5);
         this.add.text(240 + 180, 420, '획득한 장비 / 클릭하여 교체', {
             fontFamily: 'stardust-bold', fontSize: '28px', color: '#ffffff'
         }).setOrigin(0.5, 0.5);
         this.add.text(600 + 180, 420, '내 장비 / 클릭하여 유지', {
             fontFamily: 'stardust-bold', fontSize: '28px', color: '#ffffff'
         }).setOrigin(0.5, 0.5);
-        this.add.text(120, 990, ' 화살표를 눌러\n등급별 확률 변경', {
+        this.add.text(120, 990, ' 화살표를 눌러\n등급별 확률 교환', {
             fontFamily: 'stardust-bold', fontSize: '28px', color: '#ffffff'
         }).setOrigin(0.5, 0.5);
         this.leftItemUI = new ItemUI(
@@ -288,6 +291,7 @@ export class Battle extends Scene
           }
         });
 
+        this.itemQueueLengthText.setText(`남은 장비: ${this.itemQueue.length()}`);
         if (!this.leftItem) this.updateItem();
     }
 
@@ -313,6 +317,7 @@ export class Battle extends Scene
     updateItem() {
         if (!this.itemQueue.isEmpty()) {
             const { rarity, level } = this.itemQueue.dequeue();
+            this.itemQueueLengthText.setText(`남은 장비: ${this.itemQueue.length()}`);
             // this.nextItems = this.itemQueue.showcase(4);
             // this.updateNextItems();
             if (this.autoEnabled[rarityIndex[rarity]]) {
@@ -362,6 +367,7 @@ export class Battle extends Scene
             }
         } else {
             const cost = 2 ** (item.refined) * 10 * (2 ** rarityIndex[item.rarity]);
+            // const cost = 0;
             if (this.gold >= cost) {
                 this.earnGold(-cost);
                 new TempText(this, 1620, 560, `-${cost} G`, '#ff4444');

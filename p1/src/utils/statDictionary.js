@@ -38,7 +38,7 @@ export const statDict = {
     text: '고정 피해 감소',
     prefixes: ["헤파이스토스의", "벼려진", "불굴의", "강인한", "강철"],
     minValue: 1,
-    maxValue: 10,
+    maxValue: 8,
     sizeUnderFloat: 0,
   },
   leech: {
@@ -62,6 +62,7 @@ export const statDict = {
     maxValue: 10,
     sizeUnderFloat: 0,
   },
+  // 경험치 %로 전환, 투구 기본옵
   battleCry: {
     text: '첫 공격 강화(%)',
     prefixes: ["제우스의", "번개같은", "찰나의", "맹렬한", "돌격"],
