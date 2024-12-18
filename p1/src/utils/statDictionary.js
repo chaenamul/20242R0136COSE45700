@@ -37,7 +37,7 @@ export const statDict = {
   flatArmor: {
     text: '고정 피해 감소',
     prefixes: ["헤파이스토스의", "벼려진", "불굴의", "강인한", "강철"],
-    minValue: 2,
+    minValue: 1,
     maxValue: 10,
     sizeUnderFloat: 0,
   },

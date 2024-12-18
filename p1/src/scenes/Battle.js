@@ -162,9 +162,6 @@ export class Battle extends Scene
             })
             iconGroup.add(icon);
         }
-        // for (let i = 0; i < 4; i++) {
-        //     const ball = this.add.image()
-        // }
 
         const text1 = this.add.text(360, 1030, '', {
             fontFamily: 'stardust-extrabold', fontSize: '22px', color: '#ff0000'
@@ -196,29 +193,31 @@ export class Battle extends Scene
     }
 
     update (time, delta) {
-        if (this.enemy) {
-            this.enemy.update();
-        }
-        if (this.player) {
-            this.player.update(time, delta);
-        }
-
-        if (this.isBattle && !this.isPaused) {
-            this.player.attackTimer += delta;
-            this.enemy.attackTimer += delta;
-            if (this.player.attackTimer >= this.player.attackDelay) {
-                this.player.attack(this.enemy);
-                this.player.attackTimer = 0;
+        if (!this.isPaused) {
+            if (this.enemy) {
+                this.enemy.update();
             }
-            if (this.enemy.attackTimer >= this.enemy.attackDelay) {
-                this.enemy.attack(this.player);
-                this.enemy.attackTimer = 0;
+            if (this.player) {
+                this.player.update(time, delta);
+            }
+    
+            if (this.isBattle) {
+                this.player.attackTimer += delta;
+                this.enemy.attackTimer += delta;
+                if (this.player.attackTimer >= this.player.attackDelay) {
+                    this.player.attack(this.enemy);
+                    this.player.attackTimer = 0;
+                }
+                if (this.enemy.attackTimer >= this.enemy.attackDelay) {
+                    this.enemy.attack(this.player);
+                    this.enemy.attackTimer = 0;
+                }
             }
         }
     }
 
     spawnEnemy() {
-        let enemyLevel = Math.ceil((this.enemyKilled + 1) / 4);
+        let enemyLevel = Math.ceil((this.enemyKilled + 1) / 3);
         if (this.enemyKilled % 10 == 9) enemyLevel = enemyLevel + 5;
         this.enemy = new Enemy(this, 720 + 480, 120, 'bee_idle', 'bee', enemyLevel).setDepth(-2);
         this.enemy.initialize();
@@ -362,7 +361,7 @@ export class Battle extends Scene
                 new TempText(this, 1620, 560, `골드 부족`, '#ff4444');
             }
         } else {
-            const cost = 2 ** (item.refined) * 10;
+            const cost = 2 ** (item.refined) * 10 * (2 ** rarityIndex[item.rarity]);
             if (this.gold >= cost) {
                 this.earnGold(-cost);
                 new TempText(this, 1620, 560, `-${cost} G`, '#ff4444');

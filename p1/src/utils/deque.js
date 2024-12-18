@@ -30,6 +30,10 @@ export class Deque {
     return this.items.slice(this.head, Math.min(this.head + i, this.tail)); 
   }
 
+  length() {
+    return this.tail - this.head;
+  }
+
   isEmpty() {
     return this.head === this.tail;
   }

@@ -178,7 +178,7 @@ export class Player extends Phaser.GameObjects.Sprite {
     }
 
     if (this.status.criticalChance) {
-      if (this.status.criticalChance / 100 < Math.random()){
+      if (Math.random() < this.status.criticalChance / 100){
         amount = amount * criticalMultiplier;
       }
     }
@@ -196,7 +196,7 @@ export class Player extends Phaser.GameObjects.Sprite {
     if (!this.isAlive) return 0;
 
     if (this.status.dodge) {
-      if (this.status.dodge / 100 < Math.random()) {
+      if (Math.random() < this.status.dodge / 100) {
         new JumpText(this.scene, this.x - 40, this.y + 60, `회피`, '#ffffff', false);
       }
     }
