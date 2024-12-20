@@ -124,9 +124,10 @@ export class Battle extends Scene
                 });
                 icon.setTint(0xaaaaaa);
                 this.selectedItem = this.player.equipments[selecteditemType];
+                const cost = 2 ** (this.selectedItem.refined) * 10 * (2 ** rarityIndex[this.selectedItem.rarity]);
                 this.selectedItemUI.updateUI(this.selectedItem);
                 this.confirmText1.setText(`+${this.selectedItem.refined} > +${this.selectedItem.refined + 1} 강화`);
-                this.confirmText2.setText(`${2 ** (this.selectedItem.refined) * 10} G`);
+                this.confirmText2.setText(`${cost} G`);
             })
             iconGroup.add(icon);
         }
@@ -259,7 +260,6 @@ export class Battle extends Scene
 
     handlePlayerDeath() {
         this.isBattle = false;
-        // this.player.once(`animationcomplete-hero_death`, () => this.scene.start('MainMenu'));
         this.gameOverText1 = this.add.text(480, 200, 'Game Over', {
             fontFamily: 'stardust-extrabold', fontSize: '60px', color: '#ffffff'
         }).setOrigin(0.5, 0.5).setInteractive();
@@ -281,8 +281,7 @@ export class Battle extends Scene
           const rate = this.dropRate[rarity];
           const guaranteedDrops = Math.floor(rate);
           const additionalChance = rate % 1;
-      
-          // 등급별 아이템 획득 처리
+          
           for (let i = 0; i < guaranteedDrops; i++) {
             this.itemQueue.enqueue({ rarity: rarity, level: this.player.level });
           }
@@ -358,6 +357,7 @@ export class Battle extends Scene
             }
         } else if (item.itemType === 'auto') {
             const cost = item.itemLevel;
+            // const cost = 0;
             if (this.autoEnabled[rarityIndex[item.rarity]]) {
                 new TempText(this, 1620, 560, `이미 구매했어요`, '#ff4444');
                 return;
@@ -366,6 +366,7 @@ export class Battle extends Scene
                 this.earnGold(-cost);
                 new TempText(this, 1620, 560, `-${cost} G`, '#ff4444');
                 this.autoEnabled[rarityIndex[item.rarity]] = true;
+                this.changeDropRate(0);
             } else {
                 new TempText(this, 1620, 560, `골드 부족`, '#ff4444');
             }
@@ -393,18 +394,18 @@ export class Battle extends Scene
     }
 
     changeDropRate(amount) {
-        this.dropRate.common += amount;
-        this.dropRate.uncommon = Math.round((this.dropRate.uncommon + amount / 10) * 10) / 10;
-        this.dropRate.rare = Math.round((this.dropRate.rare + amount / 100) * 100) / 100;
-        this.dropRate.epic = Math.round((this.dropRate.epic + amount / 1000) * 1000) / 1000;
-        this.dropRate.mythic = Math.round((this.dropRate.mythic + amount / 10000) * 10000) / 10000;
+        for (let i = 0; i < 5; i++) {
+            this.dropRate[indexToRarity[i]] = goodRound((this.dropRate[indexToRarity[i]] + (amount) / (10 ** i)), i);
+            if (this.autoEnabled[i]) this.elevateDropRate(i, goodRound((this.dropRate[indexToRarity[i]]) * (10 ** i), i));
+        }
         this.dropRateUI.updateUI(this.dropRate);
     }
 
-    elevateDropRate(i) {
+    elevateDropRate(i, n = 1) {
+        if (i >= 4) return;
         if (this.dropRate[indexToRarity[i]] < 1 / (10 ** i)) return;
-        this.dropRate[indexToRarity[i]] = goodRound(this.dropRate[indexToRarity[i]] - (1 / (10 ** i)), i);
-        this.dropRate[indexToRarity[i + 1]] = goodRound(this.dropRate[indexToRarity[i + 1]] + (1 / (10 ** (i + 1))), i + 1);
+        this.dropRate[indexToRarity[i]] = goodRound(this.dropRate[indexToRarity[i]] - (1 / (10 ** i)) * n, i);
+        this.dropRate[indexToRarity[i + 1]] = goodRound(this.dropRate[indexToRarity[i + 1]] + (1 / (10 ** (i + 1))) * n, i + 1);
         this.dropRateUI.updateUI(this.dropRate);
     }
 }

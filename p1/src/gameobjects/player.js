@@ -198,6 +198,7 @@ export class Player extends Phaser.GameObjects.Sprite {
     if (this.status.dodge) {
       if (Math.random() < this.status.dodge / 100) {
         new JumpText(this.scene, this.x - 40, this.y + 60, `회피`, '#ffffff', false);
+        return;
       }
     }
 

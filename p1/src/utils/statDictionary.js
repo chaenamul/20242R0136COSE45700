@@ -44,8 +44,8 @@ export const statDict = {
   leech: {
     text: '흡혈(%)',
     prefixes: ["백작의", "갈망하는", "흡혈의", "목마른", "혈석"],
-    minValue: 2,
-    maxValue: 10,
+    minValue: 1.2,
+    maxValue: 6,
     sizeUnderFloat: 1,
   },
   goldBonus: {
