@@ -165,7 +165,6 @@ export function refineItem(item) {
   const upgradeValue = goodRound(100 + Math.round(2 * rarityMultiplier[item.rarity]), 2);
   const mainColor = '#ff' + Math.max(15 - item.refined, 0).toString(16).repeat(4);
   newItem.refined++;
-  console.log(upgradeValue);
   newItem.mainValue = Math.ceil(item.mainValue * upgradeValue / 100);
   newItem.statTexts[0] = item.statTexts[0].replace(/(\+\d+)/, `+${newItem.mainValue}`);
   newItem.statRarities[0] = mainColor;

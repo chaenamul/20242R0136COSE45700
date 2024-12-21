@@ -124,8 +124,8 @@ export class Battle extends Scene
                 });
                 icon.setTint(0xaaaaaa);
                 this.selectedItem = this.player.equipments[selecteditemType];
-                const cost = 2 ** (this.selectedItem.refined) * 10 * (2 ** rarityIndex[this.selectedItem.rarity]);
                 this.selectedItemUI.updateUI(this.selectedItem);
+                const cost = 2 ** (this.selectedItem.refined) * 10 * (2 ** rarityIndex[this.selectedItem.rarity]);
                 this.confirmText1.setText(`+${this.selectedItem.refined} > +${this.selectedItem.refined + 1} 강화`);
                 this.confirmText2.setText(`${cost} G`);
             })
@@ -302,6 +302,9 @@ export class Battle extends Scene
                 if (this.leftItem.itemType === this.selectedItem.itemType) {
                     this.selectedItem = this.leftItem;
                     this.selectedItemUI.updateUI(this.leftItem);
+                    const cost = 2 ** (this.selectedItem.refined) * 10 * (2 ** rarityIndex[this.selectedItem.rarity]);
+                    this.confirmText1.setText(`+${this.selectedItem.refined} > +${this.selectedItem.refined + 1} 강화`);
+                    this.confirmText2.setText(`${cost} G`);
                 }
             }
             this.allStat.updateUI(this.player.status);
@@ -381,7 +384,7 @@ export class Battle extends Scene
                 this.selectedItemUI.updateUI(this.selectedItem);
                 this.allStat.updateUI(this.player.status);
                 this.confirmText1.setText(`+${this.selectedItem.refined} > +${this.selectedItem.refined + 1} 강화`);
-                this.confirmText2.setText(`${2 ** (this.selectedItem.refined) * 10} G`);
+                this.confirmText2.setText(`${2 ** (this.selectedItem.refined) * 10 * (2 ** rarityIndex[this.selectedItem.rarity])} G`);
             } else {
                 new TempText(this, 1620, 560, `골드 부족`, '#ff4444');
             }

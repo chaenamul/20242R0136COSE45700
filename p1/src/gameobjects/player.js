@@ -258,11 +258,13 @@ export class Player extends Phaser.GameObjects.Sprite {
   }
 
   update(time, delta) {
-    if (this.status.regeneration) {
-      this.secondTimer += delta;
-      if (this.secondTimer >= this.secondDelay) {
-        this.changeHealth(this.status.regeneration);
-        this.secondTimer = 0;
+    if (this.isAlive) {
+      if (this.status.regeneration) {
+        this.secondTimer += delta;
+        if (this.secondTimer >= this.secondDelay) {
+          this.changeHealth(this.status.regeneration);
+          this.secondTimer = 0;
+        }
       }
     }
   }
